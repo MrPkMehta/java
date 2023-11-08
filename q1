@@ -1,0 +1,47 @@
+public class BankAccount {
+    private double accountBalance;
+
+    public BankAccount(double initialBalance) {
+        accountBalance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        accountBalance += amount;
+        logTransaction("Deposited", amount);
+    }
+
+    public void withdraw(double amount) throws InsufficientFundsException {
+        if (amount > accountBalance) {
+            throw new InsufficientFundsException("Insufficient funds to withdraw $" + amount);
+        }
+        accountBalance -= amount;
+        logTransaction("Withdrawn", amount);
+    }
+
+    public double getAccountBalance() {
+        return accountBalance;
+    }
+
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount(1000);
+
+        try {
+            account.withdraw(500);
+            account.withdraw(800); // This will throw an exception
+        } catch (InsufficientFundsException e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+
+        System.out.println("Current Account Balance: $" + account.getAccountBalance());
+    }
+
+    private void logTransaction(String action, double amount) {
+        System.out.println(action + ": $" + amount);
+    }
+}
+
+class InsufficientFundsException extends Exception {
+    public InsufficientFundsException(String message) {
+        super(message);
+    }
+}
